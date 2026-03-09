@@ -982,5 +982,16 @@ Make the company name "${company}" appear throughout. The tagline, CEO name, add
 
   function showError(msg) {
     const box = document.getElementById('errorBox');
-    box.textContent = msg;
-    box.
+        box.textContent = msg;
+        box.style.display = 'block';
+  }
+
+    function hideError() {
+          const box = document.getElementById('errorBox');
+          box.style.display = 'none';
+          box.textContent = '';
+    }
+</script>
+</body>
+</html>
+</html>html>

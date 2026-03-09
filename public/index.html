@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CorporateApology.com — Accountability at Scale™</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy: #0d1b2a;
+      --slate: #1c2e40;
+      --steel: #2f4156;
+      --mid: #4a6785;
+      --fog: #a0b4c5;
+      --paper: #f7f5f0;
+      --cream: #ede9e0;
+      --rule: #c8bfaf;
+      --ink: #1a1a1a;
+      --subink: #3d3d3d;
+      --accent: #8b1a1a;
+      --gold: #b8960c;
+      --seal: #8b1a1a;
+      --danger: #c0392b;
+      --sans: 'Barlow', sans-serif;
+      --serif: 'EB Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #e8e4dd;
+      font-family: var(--sans);
+      color: var(--ink);
+      min-height: 100vh;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 39px,
+          rgba(0,0,0,0.03) 39px,
+          rgba(0,0,0,0.03) 40px
+        );
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: var(--navy);
+      color: white;
+      padding: 0;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 32px 20px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .site-title {
+      font-family: var(--serif);
+      font-size: 2.1rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .site-title span {
+      color: var(--fog);
+      font-style: italic;
+    }
+
+    .site-tagline {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fog);
+      margin-top: 8px;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 4px 8px;
+      color: var(--fog);
+      white-space: nowrap;
+    }
+
+    /* ── FORM PANEL ── */
+    .form-panel {
+      max-width: 900px;
+      margin: 40px auto 0;
+      padding: 0 32px;
+    }
+
+    .form-card {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 36px 40px;
+      position: relative;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--navy), var(--accent));
+    }
+
+    .form-heading {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    input[type="text"], select, textarea {
+      font-family: var(--serif);
+      font-size: 1rem;
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      background: var(--paper);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+      appearance: none;
+    }
+
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--navy);
+      background: white;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .severity-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .severity-labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      color: var(--mid);
+      margin-top: 4px;
+    }
+
+    .severity-val {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      min-width: 80px;
+      text-align: right;
+    }
+
+    .generate-btn {
+      margin-top: 28px;
+      width: 100%;
+      background: var(--navy);
+      color: white;
+      border: none;
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .generate-btn:hover:not(:disabled) { background: var(--accent); }
+    .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+
+    .generate-btn.loading .spinner { display: block; }
+    .generate-btn.loading .btn-text { opacity: 0.6; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── ERROR ── */
+    .error-box {
+      margin-top: 16px;
+      background: #fdf0ef;
+      border: 1px solid #e8a09a;
+      padding: 14px 18px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--danger);
+      display: none;
+    }
+
+    /* ── LETTERHEAD OUTPUT ── */
+    .output-area {
+      max-width: 900px;
+      margin: 40px auto 60px;
+      padding: 0 32px;
+      display: none;
+    }
+
+    .output-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      justify-content: flex-end;
+    }
+
+    .ctrl-btn {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--steel);
+      background: transparent;
+      color: var(--steel);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ctrl-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
+    /* The actual letter */
+    .letterhead {
+      background: white;
+      border: 1px solid #bbb;
+      padding: 0;
+      font-family: var(--serif);
+      color: var(--ink);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+
+    /* Watermark */
+    .letterhead::before {
+      content: 'SINCERE APOLOGY™';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-family: var(--mono);
+      font-size: 4.5rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: rgba(139,26,26,0.04);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0;
+    }
+
+    .letter-inner {
+      position: relative;
+      z-index: 1;
+      padding: 52px 68px 60px;
+    }
+
+    /* Letter header */
+    .lh-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--navy);
+      margin-bottom: 28px;
+    }
+
+    .lh-logo-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lh-logo-mark {
+      width: 46px;
+      height: 46px;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .lh-logo-mark svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+      opacity: 0.9;
+    }
+
+    .lh-company-name {
+      font-family: var(--sans);
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .lh-tagline {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-top: 5px;
+    }
+
+    .lh-meta {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--mid);
+      line-height: 1.8;
+    }
+
+    .lh-ref {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Address block */
+    .lh-address-block {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 40px;
+    }
+
+    .lh-from, .lh-to {
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--subink);
+    }
+
+    .lh-label {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--fog);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* Subject line */
+    .lh-subject {
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 10px 0;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .lh-subject-key {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      flex-shrink: 0;
+    }
+
+    .lh-subject-val {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    /* Body */
+    .lh-body {
+      font-size: 0.96rem;
+      line-height: 1.85;
+      color: var(--ink);
+    }
+
+    .lh-body p {
+      margin-bottom: 18px;
+    }
+
+    .lh-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Signature */
+    .lh-signature {
+      margin-top: 36px;
+      padding-top: 24px;
+    }
+
+    .lh-sig-close {
+      font-size: 0.92rem;
+      margin-bottom: 40px;
+      color: var(--subink);
+    }
+
+    .lh-sig-name {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.6rem;
+      color: var(--slate);
+      letter-spacing: -0.01em;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 6px;
+      display: inline-block;
+      min-width: 220px;
+    }
+
+    .lh-sig-title {
+      font-size: 0.78rem;
+      color: var(--mid);
+      margin-top: 6px;
+    }
+
+    .lh-sig-company {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    /* Seal */
+    .lh-seal {
+      position: absolute;
+      right: 68px;
+      bottom: 56px;
+      width: 88px;
+      height: 88px;
+      opacity: 0.12;
+    }
+
+    /* Disclaimer footer */
+    .lh-disclaimer {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      line-height: 1.7;
+      color: var(--fog);
+    }
+
+    /* Accent stripe at top of letter */
+    .lh-stripe {
+      height: 6px;
+      background: linear-gradient(90deg, var(--navy) 0%, var(--accent) 100%);
+    }
+
+    /* ── QUOTE BANNER ── */
+    .quote-banner {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 3px solid var(--accent);
+      padding: 28px 32px;
+    }
+
+    .quote-banner-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .quote-mark {
+      font-family: var(--serif);
+      font-size: 5rem;
+      line-height: 0.6;
+      color: var(--accent);
+      opacity: 0.6;
+      flex-shrink: 0;
+      user-select: none;
+      margin-top: 10px;
+    }
+
+    .quote-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.55;
+      color: white;
+      letter-spacing: -0.01em;
+    }
+
+    .quote-attribution {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fog);
+      margin-top: 10px;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      text-align: center;
+      padding: 22px 28px;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+      border-top: 1px solid #ccc;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 2;
+    }
+
+    .footer-credit {
+      color: #aaa;
+    }
+
+    .footer-credit a {
+      color: var(--mid);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .footer-credit a:hover {
+      color: white;
+      border-bottom-color: var(--fog);
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: white; background-image: none; }
+      .site-header, .form-panel, .output-controls, .site-footer { display: none !important; }
+      .output-area { display: block !important; margin: 0; padding: 0; }
+      .letterhead { box-shadow: none; border: none; }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .letter-inner { padding: 32px 28px 40px; }
+      .lh-address-block { flex-direction: column; }
+      .lh-seal { display: none; }
+      .lh-sig-name { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="site-title">Corporate<span>Apology</span>.com</div>
+      <div class="site-tagline">Accountability at Scale™ · Disrupting Remorse Since 2024</div>
+    </div>
+    <div class="header-badges">
+      <div class="badge">ISO 9001: Certified Contrite</div>
+      <div class="badge">B-Corp Pending</div>
+      <div class="badge">Learnings-Forward™</div>
+    </div>
+  </div>
+</header>
+
+<!-- QUOTE BANNER -->
+<div class="quote-banner">
+  <div class="quote-banner-inner">
+    <div class="quote-mark">&ldquo;</div>
+    <div>
+      <div class="quote-text">The most honest thing a company can do is automate its dishonesty.</div>
+      <div class="quote-attribution">— CorporateApology.com</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-panel">
+  <div class="form-card">
+    <div class="form-heading">Apology Configuration Dashboard</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Company / Organization Name</label>
+        <input type="text" id="companyName" placeholder="e.g. Synergize Inc., DataHarvest LLC, Uber..." />
+      </div>
+      <div class="form-group">
+        <label>Nature of Transgression</label>
+        <select id="transgression">
+          <option value="unspecified">— Let AI decide —</option>
+          <option value="data_breach">Catastrophic Data Breach</option>
+          <option value="toxic_workplace">Toxic Workplace Culture</option>
+          <option value="environmental">Environmental Catastrophe</option>
+          <option value="fraud">Securities / Financial Fraud</option>
+          <option value="product_failure">Product Recall / Safety Failure</option>
+          <option value="ai_gone_wrong">AI System Gone Wrong</option>
+          <option value="monopoly">Anticompetitive Behavior</option>
+          <option value="layoffs">Mass Layoffs (with ping-pong tables)</option>
+          <option value="privacy">Selling User Data (oops)</option>
+          <option value="ceo_drama">CEO Misconduct / Romance Scandal</option>
+          <option value="ipo_disaster">Post-IPO Value Destruction</option>
+          <option value="general_vibes">General Existential Wrongness</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Industry Vertical</label>
+        <select id="industry">
+          <option value="tech">Tech / SaaS / "Platform"</option>
+          <option value="fintech">Fintech / Crypto / "DeFi"</option>
+          <option value="health">HealthTech / BioTech / Wellness</option>
+          <option value="consumer">Consumer Hardware (IoT / "Smart")</option>
+          <option value="social">Social Media / Content Platform</option>
+          <option value="logistics">Logistics / "Last Mile" Something</option>
+          <option value="energy">Clean Energy / CleanTech</option>
+          <option value="food">FoodTech / Ghost Kitchen / Delivery</option>
+          <option value="real_estate">PropTech / Real Estate Disruption</option>
+          <option value="ai">AI / "Foundation Models" / LLM Startup</option>
+          <option value="space">Space / "New Space" Economy</option>
+          <option value="other">Other (Undefined Disruption)</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Incident Severity</label>
+        <div class="severity-row">
+          <input type="range" id="severity" min="1" max="5" value="3" />
+          <span class="severity-val" id="severityLabel">Moderate ("a learning")</span>
+        </div>
+        <div class="severity-labels">
+          <span>Minor ("a journey")</span>
+          <span>Moderate</span>
+          <span>Severe</span>
+          <span>Catastrophic</span>
+          <span>Extinction-Level</span>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Additional Context (optional)</label>
+        <textarea id="context" placeholder="Any specific details, named victims, regulatory bodies involved, or preferred scapegoats..."></textarea>
+      </div>
+    </div>
+    <button class="generate-btn" id="generateBtn" onclick="generateApology()">
+      <span class="spinner"></span>
+      <span class="btn-text">Generate Official Apology Letter</span>
+    </button>
+    <div class="error-box" id="errorBox"></div>
+  </div>
+</div>
+
+<!-- OUTPUT AREA -->
+<div class="output-area" id="outputArea">
+  <div class="output-controls">
+    <button class="ctrl-btn" onclick="generateApology()">↺ Regenerate</button>
+    <button class="ctrl-btn" onclick="window.print()">⊙ Print / Save PDF</button>
+  </div>
+  <div class="letterhead" id="letterhead">
+    <div class="lh-stripe"></div>
+    <div class="letter-inner" id="letterInner">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div>corporateapology.com · No actual accountability was produced in the making of this letter · Powered by AI, just like everything else</div>
+  <div class="footer-credit">Made by <a href="/cdn-cgi/l/email-protection#146071707f7b777c7166547379757d783a777b79">Ted Kocher</a> · <a href="https://tedkocher.com" target="_blank">tedkocher.com</a></div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ── SEVERITY LABELS ──
+  const severityMap = {
+    1: 'Negligible ("a journey")',
+    2: 'Minor ("a learning opportunity")',
+    3: 'Moderate ("a learning")',
+    4: 'Severe ("deeply regrettable")',
+    5: 'Extinction-Level ("unprecedented")'
+  };
+
+  document.getElementById('severity').addEventListener('input', function() {
+    document.getElementById('severityLabel').textContent = severityMap[this.value];
+  });
+
+  // ── GENERATE ──
+  async function generateApology() {
+    const companyName = document.getElementById('companyName').value.trim();
+    if (!companyName) {
+      showError('Please enter a company name to hold accountable.');
+      return;
+    }
+
+    const transgression = document.getElementById('transgression').value;
+    const industry = document.getElementById('industry').value;
+    const severity = document.getElementById('severity').value;
+    const context = document.getElementById('context').value.trim();
+
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Consulting Legal...';
+    hideError();
+
+    try {
+      const systemPrompt = buildSystemPrompt();
+      const userPrompt = buildUserPrompt(companyName, transgression, industry, severity, context);
+
+      // Calls our Netlify function proxy — the API key never touches the browser
+      const response = await fetch('/api/apology', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userPrompt }]
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.error) throw new Error(data.error.message);
+
+      const text = data.content[0].text.trim();
+      const parsed = JSON.parse(text);
+      renderLetter(parsed, companyName);
+
+    } catch (err) {
+      showError('Error: ' + err.message + '. Please try again.');
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent = 'Generate Official Apology Letter';
+    }
+  }
+
+  function buildSystemPrompt() {
+    return `You are the world's premier corporate non-apology generator. You write formal, official-looking corporate apology letters that are masterclasses in accountability-avoidance. Your letters should feel like they were written by a committee of lawyers, a VP of People Operations, a growth hacker, and someone who just read "Good to Great" on a plane.
+
+STYLE GUIDE:
+- Use passive voice liberally ("mistakes were made," "situations developed")
+- Reference "learnings," "journeys," "pivots," and "ecosystems"
+- Never actually admit fault — use "to the extent that," "if anyone was affected," "any perceived"
+- Deploy Silicon Valley buzzwords: disrupt, at scale, mission-driven, stakeholders, iterate, impact
+- Drop in references to dead/disgraced tech: Juicero, Theranos, WeWork, Vine, Google+, Quibi, Segway, Clubhouse, etc.
+- Include vague commitments to future excellence with no specifics
+- The CEO should have a name that sounds like a startup founder (e.g., "Brax Hollowell", "Sloane Vanthorpe", "Kesh Priya-Nakamura", "Brent Stormfeld")
+- Generate a fake corporate tagline for the company (e.g., "Making the World a Better Place™", "Disrupting [X] for [Y]™")
+- The company address should be somewhere like "1 Innovation Way, San Francisco, CA" or similar
+- Include a fake reference number (format: CA-[YEAR]-[4-digit number])
+- Generate a subject line that sounds serious but says nothing
+- Sign off with something that sounds like genuine warmth but isn't
+- The recipient should be "Our Valued Community" or "Dear Stakeholder Family" type language
+- The disclaimer at the bottom should be dense legal-sounding gibberish
+
+OUTPUT FORMAT: Return ONLY valid JSON (no markdown, no backticks, no preamble) with this exact structure:
+{
+  "ceoName": "...",
+  "ceoTitle": "...",
+  "companyTagline": "...",
+  "companyAddress": "...",
+  "refNumber": "...",
+  "date": "...",
+  "subjectLine": "...",
+  "salutation": "...",
+  "paragraphs": ["...", "...", "...", "..."],
+  "closing": "...",
+  "disclaimer": "..."
+}
+
+paragraphs should be 4-5 paragraphs, each 3-5 sentences. Make them dense with corporate speak. Each paragraph should feel like it's about to apologize and then... doesn't.`;
+  }
+
+  function buildUserPrompt(company, transgression, industry, severity, context) {
+    const transgressionMap = {
+      unspecified: 'an unspecified but deeply regrettable situation',
+      data_breach: 'a catastrophic data breach exposing millions of user records',
+      toxic_workplace: 'a toxic workplace culture including harassment, discrimination, and mandatory fun',
+      environmental: 'significant environmental damage',
+      fraud: 'securities fraud and financial misrepresentation',
+      product_failure: 'a product recall and/or safety failure causing harm to users',
+      ai_gone_wrong: 'an AI system that behaved in deeply problematic ways',
+      monopoly: 'anticompetitive behavior and market manipulation',
+      layoffs: 'mass layoffs of 40% of staff announced via Zoom on a Friday afternoon',
+      privacy: 'the unauthorized sale and misuse of user data to third parties',
+      ceo_drama: 'CEO personal misconduct that came to light in a very public way',
+      ipo_disaster: 'a post-IPO valuation collapse of 90%+ that wiped out retail investors',
+      general_vibes: 'an overall pattern of behavior that has left many feeling uneasy'
+    };
+
+    const severityDescMap = {
+      1: 'treat this as a minor footnote the company is barely acknowledging',
+      2: 'treat this as somewhat serious but mostly just a PR exercise',
+      3: 'treat this as a real problem the company is aggressively not solving',
+      4: 'treat this as deeply serious with real victims whom the letter carefully avoids acknowledging directly',
+      5: 'treat this as an extinction-level reputational event that legal has spent 6 weeks workshopping'
+    };
+
+    return `Generate a corporate non-apology letter for: ${company}
+Industry: ${industry}
+Transgression: ${transgressionMap[transgression] || transgression}
+Severity: ${severityDescMap[severity]}
+${context ? 'Additional context: ' + context : ''}
+
+Make the company name "${company}" appear throughout. The tagline, CEO name, address, and all other details should feel appropriate to this specific company and industry. Be darkly funny, precise in your corporate-speak, and genuinely satirical. Reference at least one failed tech company or product as a comparison somewhere.`;
+  }
+
+  // ── RENDER ──
+  function renderLetter(data, companyName) {
+    const now = new Date();
+    const dateStr = data.date || now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+    const initials = companyName.split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0,2);
+
+    const html = `
+      <!-- LETTERHEAD HEADER -->
+      <div class="lh-header">
+        <div class="lh-logo-area">
+          <div class="lh-logo-mark">
+            <svg viewBox="0 0 24 24"><text x="50%" y="70%" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="11">${initials}</text></svg>
+          </div>
+          <div>
+            <div class="lh-company-name">${escHtml(companyName)}</div>
+            <div class="lh-tagline">${escHtml(data.companyTagline || 'Moving Fast, Breaking Things™')}</div>
+          </div>
+        </div>
+        <div class="lh-meta">
+          <div>${escHtml(data.companyAddress || '1 Disruption Way, San Francisco, CA 94105')}</div>
+          <div>communications@${companyName.toLowerCase().replace(/[^a-z0-9]/g,'')}.com</div>
+          <div style="margin-top:6px">Date: ${escHtml(dateStr)}</div>
+          <div class="lh-ref">Ref: ${escHtml(data.refNumber || 'CA-2025-0001')}</div>
+        </div>
+      </div>
+
+      <!-- ADDRESS BLOCK -->
+      <div class="lh-address-block">
+        <div class="lh-from">
+          <span class="lh-label">From</span>
+          ${escHtml(data.ceoName || 'Brax Hollowell')}<br>
+          ${escHtml(data.ceoTitle || 'Chief Executive Officer')}<br>
+          ${escHtml(companyName)}
+        </div>
+        <div class="lh-to">
+          <span class="lh-label">To</span>
+          Our Valued Community,<br>
+          Stakeholders &amp; Affected Parties<br>
+          Worldwide
+        </div>
+      </div>
+
+      <!-- SUBJECT -->
+      <div class="lh-subject">
+        <span class="lh-subject-key">Re:</span>
+        <span class="lh-subject-val">${escHtml(data.subjectLine || 'An Important Update Regarding Recent Developments')}</span>
+      </div>
+
+      <!-- BODY -->
+      <div class="lh-body">
+        <p>${escHtml(data.salutation || 'Dear Valued Members of Our Community,')}</p>
+        ${(data.paragraphs || []).map(p => `<p>${escHtml(p)}</p>`).join('')}
+      </div>
+
+      <!-- SIGNATURE -->
+      <div class="lh-signature">
+        <p class="lh-sig-close">${escHtml(data.closing || 'With deep accountability and forward momentum,')}</p>
+        <div class="lh-sig-name">${escHtml(data.ceoName || 'Brax Hollowell')}</div>
+        <div class="lh-sig-title">${escHtml(data.ceoTitle || 'Chief Executive Officer')}</div>
+        <div class="lh-sig-company">${escHtml(companyName)}</div>
+      </div>
+
+      <!-- SEAL SVG -->
+      <svg class="lh-seal" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" stroke="${'#8b1a1a'}" stroke-width="2"/>
+        <circle cx="50" cy="50" r="38" stroke="${'#8b1a1a'}" stroke-width="1"/>
+        <text x="50" y="44" text-anchor="middle" font-family="monospace" font-size="7" fill="#8b1a1a" letter-spacing="1">OFFICIALLY</text>
+        <text x="50" y="55" text-anchor="middle" font-family="monospace" font-size="7" fill="#8b1a1a" letter-spacing="1">ACCOUNTABLE</text>
+        <text x="50" y="66" text-anchor="middle" font-family="monospace" font-size="6" fill="#8b1a1a">™</text>
+      </svg>
+
+      <!-- DISCLAIMER -->
+      <div class="lh-disclaimer">
+        ${escHtml(data.disclaimer || 'This communication constitutes an expression of regret in a general sense and shall not be construed as an admission of liability, wrongdoing, or awareness of wrongdoing by the issuing entity, its subsidiaries, affiliates, officers, directors, employees, contractors, interns, or anyone who has ever attended a company offsite. Any resemblance to an actual apology is coincidental and unintentional. This letter was prepared with the assistance of legal counsel and has been reviewed by Communications, HR, Investor Relations, and at least three people named Chad. Past performance of accountability is not indicative of future accountability. © ' + new Date().getFullYear() + ' ' + companyName + '. All rights reserved. No actual change was made.')}
+      </div>
+    `;
+
+    document.getElementById('letterInner').innerHTML = html;
+    document.getElementById('outputArea').style.display = 'block';
+    document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = msg;
+    box.

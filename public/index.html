@@ -803,7 +803,9 @@
       if (data.error) throw new Error(data.error.message);
 
       const text = data.content[0].text.trim();
-      const parsed = JSON.parse(text);
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+                      if (!jsonMatch) throw new Error('No JSON found in response');
+                                      const parsed = JSON.parse(jsonMatch[0]);
       renderLetter(parsed, companyName);
 
     } catch (err) {

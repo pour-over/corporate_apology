@@ -216,17 +216,28 @@
       display: flex;
       justify-content: space-between;
       font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.08em;
+      font-size: 0.55rem;
+      letter-spacing: 0.03em;
       color: var(--mid);
       margin-top: 4px;
     }
+    .severity-labels span {
+      text-align: center;
+      flex: 1;
+      min-width: 0;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.2;
+    }
+    .severity-labels span:first-child { text-align: left; }
+    .severity-labels span:last-child  { text-align: right; }
 
     .severity-val {
       font-family: var(--mono);
       font-size: 0.7rem;
       color: var(--accent);
-      min-width: 80px;
+      min-width: max-content;
+      white-space: nowrap;
       text-align: right;
     }
 
@@ -610,6 +621,24 @@
       color: white;
       border-bottom-color: var(--fog);
     }
+    .kofi-print-link {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      padding-top: 4px;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.07em;
+      color: #999;
+      text-transform: lowercase;
+    }
+    .kofi-print-link a {
+      color: #aaa;
+      text-decoration: none;
+      border-bottom: 1px dotted #bbb;
+      transition: color 0.15s, border-bottom-color 0.15s;
+    }
+    .kofi-print-link a:hover { color: #555; border-bottom-color: #777; }
 
     /* ── PRINT ── */
     @media print {
@@ -627,6 +656,9 @@
       .lh-address-block { flex-direction: column; }
       .lh-seal { display: none; }
       .lh-sig-name { font-size: 1.2rem; }
+      .severity-row { flex-wrap: wrap; gap: 4px; }
+      .severity-row input[type="range"] { flex: 1 1 100%; }
+      .severity-val { flex: 1 1 100%; text-align: left; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -747,6 +779,7 @@
 <footer class="site-footer">
   <div>corporateapology.com · No actual accountability was produced in the making of this letter · Powered by AI, just like everything else</div>
   <div class="footer-credit">Made by <a href="/cdn-cgi/l/email-protection#146071707f7b777c7166547379757d783a777b79">Ted Kocher</a> · <a href="https://tedkocher.com" target="_blank">tedkocher.com</a></div>
+  <div class="kofi-print-link"><a href="https://ko-fi.com/backpocketmusic" target="_blank" rel="noopener noreferrer">make printable — $1 via ko-fi ↗</a></div>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>

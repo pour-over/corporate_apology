@@ -216,28 +216,17 @@
       display: flex;
       justify-content: space-between;
       font-family: var(--mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.03em;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
       color: var(--mid);
       margin-top: 4px;
     }
-    .severity-labels span {
-      text-align: center;
-      flex: 1;
-      min-width: 0;
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.2;
-    }
-    .severity-labels span:first-child { text-align: left; }
-    .severity-labels span:last-child  { text-align: right; }
 
     .severity-val {
       font-family: var(--mono);
       font-size: 0.7rem;
       color: var(--accent);
-      min-width: max-content;
-      white-space: nowrap;
+      min-width: 80px;
       text-align: right;
     }
 
@@ -621,24 +610,6 @@
       color: white;
       border-bottom-color: var(--fog);
     }
-    .kofi-print-link {
-      display: block;
-      text-align: center;
-      margin-top: 10px;
-      padding-top: 4px;
-      font-family: var(--mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.07em;
-      color: #999;
-      text-transform: lowercase;
-    }
-    .kofi-print-link a {
-      color: #aaa;
-      text-decoration: none;
-      border-bottom: 1px dotted #bbb;
-      transition: color 0.15s, border-bottom-color 0.15s;
-    }
-    .kofi-print-link a:hover { color: #555; border-bottom-color: #777; }
 
     /* ── PRINT ── */
     @media print {
@@ -656,9 +627,6 @@
       .lh-address-block { flex-direction: column; }
       .lh-seal { display: none; }
       .lh-sig-name { font-size: 1.2rem; }
-      .severity-row { flex-wrap: wrap; gap: 4px; }
-      .severity-row input[type="range"] { flex: 1 1 100%; }
-      .severity-val { flex: 1 1 100%; text-align: left; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -714,6 +682,7 @@
           <option value="privacy">Selling User Data (oops)</option>
           <option value="ceo_drama">CEO Misconduct / Romance Scandal</option>
           <option value="ipo_disaster">Post-IPO Value Destruction</option>
+          <option value="offended_community">Offended Community (Unspecified)</option>
           <option value="general_vibes">General Existential Wrongness</option>
         </select>
       </div>
@@ -731,6 +700,7 @@
           <option value="real_estate">PropTech / Real Estate Disruption</option>
           <option value="ai">AI / "Foundation Models" / LLM Startup</option>
           <option value="space">Space / "New Space" Economy</option>
+          <option value="edtech">EdTech / "Lifelong Learning" / Disrupting Diplomas™</option>
           <option value="other">Other (Undefined Disruption)</option>
         </select>
       </div>
@@ -778,8 +748,7 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div>corporateapology.com · No actual accountability was produced in the making of this letter · Powered by AI, just like everything else</div>
-  <div class="footer-credit">Made by <a href="/cdn-cgi/l/email-protection#146071707f7b777c7166547379757d783a777b79">Ted Kocher</a> · <a href="https://tedkocher.com" target="_blank">tedkocher.com</a></div>
-  <div class="kofi-print-link"><a href="https://ko-fi.com/backpocketmusic" target="_blank" rel="noopener noreferrer">make printable — $1 via ko-fi ↗</a></div>
+  <div class="footer-credit">Made by <a href="https://tedkocher.com" target="_blank">Ted Kocher</a> · tedkocher@gmail.com</div>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -836,9 +805,7 @@
       if (data.error) throw new Error(data.error.message);
 
       const text = data.content[0].text.trim();
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-                      if (!jsonMatch) throw new Error('No JSON found in response');
-                                      const parsed = JSON.parse(jsonMatch[0]);
+      const parsed = JSON.parse(text);
       renderLetter(parsed, companyName);
 
     } catch (err) {
@@ -902,6 +869,7 @@ paragraphs should be 4-5 paragraphs, each 3-5 sentences. Make them dense with co
       privacy: 'the unauthorized sale and misuse of user data to third parties',
       ceo_drama: 'CEO personal misconduct that came to light in a very public way',
       ipo_disaster: 'a post-IPO valuation collapse of 90%+ that wiped out retail investors',
+      offended_community: 'offending an unspecified but deeply vocal community whose concerns have been characterized internally as "a lot"',
       general_vibes: 'an overall pattern of behavior that has left many feeling uneasy'
     };
 
@@ -1017,15 +985,5 @@ Make the company name "${company}" appear throughout. The tagline, CEO name, add
 
   function showError(msg) {
     const box = document.getElementById('errorBox');
-        box.textContent = msg;
-        box.style.display = 'block';
-  }
-
-    function hideError() {
-          const box = document.getElementById('errorBox');
-          box.style.display = 'none';
-          box.textContent = '';
-    }
-</script>
-</body>
-</html>
+    box.textContent = msg;
+    box.

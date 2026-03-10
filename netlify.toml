@@ -1,13 +1,4 @@
 # netlify.toml
-# Tells Netlify where your site files and functions live.
-
 [build]
-  publish = "public"          # your HTML lives here
-  functions = "netlify/functions"  # your serverless functions live here
-
-# Proxy rule: any request to /api/apology gets handled by the function
-# This means the browser calls /api/apology — never api.anthropic.com directly
-[[redirects]]
-  from = "/api/apology"
-  to = "/.netlify/functions/apology"
-  status = 200
+  publish = "public"
+  functions = "netlify/functions"

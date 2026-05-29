@@ -1,4 +1,12 @@
-# netlify.toml
 [build]
   publish = "public"
   functions = "netlify/functions"
+
+# Explicit fallback route: /api/apology → the function.
+# The function also self-registers via its config.path export; this redirect
+# guarantees the path resolves even if path-config parsing is unavailable.
+[[redirects]]
+  from = "/api/apology"
+  to = "/.netlify/functions/apology"
+  status = 200
+  force = true

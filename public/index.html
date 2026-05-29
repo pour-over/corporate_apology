@@ -726,10 +726,18 @@ function generate(){
       messages:[{role:'user',content:buildUser(co,tkey,ind,sev,tone,ctx)}]
     })
   })
-  .then(function(r){return r.json();})
-  .then(function(d){
+  .then(function(r){return r.text().then(function(t){return {status:r.status,text:t};});})
+  .then(function(resp){
     clearInterval(miv);
+    var raw=resp.text||'';
+    // If the function route isn't resolving, Netlify serves an HTML 404 page
+    if(raw.trim().charAt(0)==='<'){
+      throw new Error('The /api/apology function did not respond (got an HTML page instead of JSON). The serverless function may still be deploying \u2014 wait ~60s and retry. If it persists, the function route is misconfigured.');
+    }
+    var d;
+    try{d=JSON.parse(raw);}catch(e){throw new Error('Server returned an unreadable response (HTTP '+resp.status+').');}
     if(d.error)throw new Error(typeof d.error==='object'?d.error.message:String(d.error));
+    if(!d.content||!d.content[0]||!d.content[0].text)throw new Error('No content returned from the model. Retry.');
     var txt=d.content[0].text.trim().replace(/^```json\s*/i,'').replace(/\s*```$/i,'').trim();
     var parsed=safeParse(txt);
     lastSubj=parsed.subjectLine||'';

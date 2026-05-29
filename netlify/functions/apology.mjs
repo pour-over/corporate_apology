@@ -1,7 +1,7 @@
 // netlify/functions/apology.mjs
 // Server-side proxy — API key never reaches the browser.
-// Lives at default path /.netlify/functions/apology; netlify.toml redirects
-// /api/apology here. No config.path export (keeps the redirect target stable).
+// Routed via the in-code config.path export (Netlify's recommended method).
+
 
 export default async (req) => {
   if (req.method !== 'POST') {
@@ -13,7 +13,7 @@ export default async (req) => {
   const apiKey = Netlify.env.get('ANTHROPIC_API_KEY');
   if (!apiKey) {
     return new Response(
-      JSON.stringify({ error: { message: 'ANTHROPIC_API_KEY not set in Netlify → Site Settings → Environment Variables' } }),
+      JSON.stringify({ error: { message: 'ANTHROPIC_API_KEY not set in Netlify env vars' } }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
@@ -44,4 +44,8 @@ export default async (req) => {
       status: 502, headers: { 'Content-Type': 'application/json' }
     });
   }
+};
+
+export const config = {
+  path: "/api/apology"
 };

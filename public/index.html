@@ -660,7 +660,41 @@ var ADDRS={
 
 var LOADING=['Consulting Legal...','Drafting Learnings Framework...','Contacting Spin Doctors...','Calibrating Accountability Theater...','Convening Emergency PR Committee...','Suppressing Internal Memos...','Preparing Stakeholder Journey Map...','Aligning on Messaging Architecture...','Quantifying Regret at Scale...','Reaching Out to Chad in Communications...','Scheduling Post-Incident Town Hall...','Identifying Preferred Narrative...'];
 
-var lastCo='', lastSubj='';
+// ── EXECUTIVE NAME GENERATOR ────────────────────────────────────────────────
+// Names are generated client-side and injected into the prompt so the model
+// uses what it's given instead of defaulting to the first example every time.
+
+var FIRST_NAMES=['Brax','Sloane','Vesper','Soren','Mirren','Daxton','Riven','Waverly','Calen','Tanner','Kesh','Jett','Brix','Cade','Lennox','Sable','Thane','Orion','Wren','Dash','Kai','Zane','Cy','Dex','Beck','Quill','Rell','Stellan','Avery','Marlowe','Ellison','Sutton','Cormac','Lux','Bowie','Indra','Nico','Saoirse','Tobias','Anders','Greer','Hollis','Iver','Joss','Keaton','Lior','Magnus','Niamh','Oisin','Pax','Remy','Sayer','Teo','Ulrik','Veda','Wilder','Xander','Yara','Zev','Arden','Blaise','Caspian','Dove','Emrys','Fenn','Gideon','Hawk','Ines','Jericho','Knox','Lark','Maren','Nash','Otis','Phaedra','Quinn','Rowan','Saga','Tindra','Ulla','Vail','Wynn','Zinnia','Cyrus','Bellamy','Sterling','Auden','Lazlo','Pierce','Tamsin','Vianne','Hugo','Odette','Caius','Briar','Elio','Fia','Gunnar','Halcyon'];
+
+var LAST_NAMES=['Hollowell','Vanthorpe','Thane','Vail','Cole','Krieger','Nash','Orin','Draper','Kole','Ashford','Priya-Nakamura','Sterling','Wexley','Marchetti','Okonkwo','Fairweather','Castellane','Brightwater','Voss','Calloway','Ridgeway','Sinclair-Boyd','Hargrove','Lindqvist','Almeida','Sandoval','Whitlock','Beaumont','Ashby','Cromwell','Delacroix','Eastwood','Fontaine','Grimaldi','Hartmann','Ishikawa','Janssen','Kingsley','Larkspur','Montague','Nakashima','Ovington','Pemberton','Quintero','Rasmussen','Stavros','Thornbury','Underwood','Vasquez','Wakefield','Yarrow','Zimmerman','Abernathy','Blackwood','Carrington','Dunmore','Ellsworth','Fairbanks','Goodwin-Pierce','Hawthorne','Ingram','Joffrey','Kristiansen','Lockhart','Merriweather','Norrington','Oxley','Prendergast','Ravenscroft','Saltonstall','Templeton','Vanderbilt-Cho','Westergaard','Yardley','Aldridge','Bramwell','Chastain','Devereux','Engelhart','Fitzgerald','Halloran','Kettleworth','Lindgren','Mortimer','Nystrom','Pinkerton','Rutherford','Stronghold','Tillingham','Wadsworth'];
+
+var CEO_TITLES=['Chief Executive Officer','Co-Founder & Chief Executive Officer','Founder & CEO','Chief Executive Officer & Visionary-in-Residence','CEO & Chief Mission Architect'];
+
+var EXEC_ROLES=['Chief Trust Officer','Chief People Officer','Chief Empathy Engineer','Global Head of Consequence Management','VP of Stakeholder Experience','Chief Listening Officer','Chief Accountability Officer','Head of Narrative Integrity','Chief Transparency Evangelist','VP of Trust & Safety Theater','Chief Resilience Officer','Global Head of Stakeholder Healing','Chief Culture Steward','Head of Proactive Contrition','VP of Reputational Surface Area','Chief Values Officer','Director of Forward Momentum','Chief Humility Officer','Head of Stakeholder Alignment','VP of Crisis Storytelling'];
+
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+function genName(used){
+  var name, guard=0;
+  do { name=pick(FIRST_NAMES)+' '+pick(LAST_NAMES); guard++; }
+  while(used.indexOf(name)!==-1 && guard<20);
+  used.push(name);
+  return name;
+}
+
+function genExecTeam(){
+  var used=[];
+  var roles=EXEC_ROLES.slice();
+  // shuffle roles, take 2 distinct
+  roles.sort(function(){return Math.random()-0.5;});
+  return {
+    ceoName:genName(used), ceoTitle:pick(CEO_TITLES),
+    exec2Name:genName(used), exec2Title:roles[0],
+    exec3Name:genName(used), exec3Title:roles[1]
+  };
+}
+
+var lastCo='', lastSubj='', lastTeam=null;
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 
@@ -715,6 +749,8 @@ function generate(){
   var ctx=document.getElementById('context').value.trim();
   var addrs=ADDRS[ind]||ADDRS.other;
   var addr=addrs[Math.floor(Math.random()*addrs.length)];
+  var team=genExecTeam();
+  lastTeam=team;
 
   fetch('/api/apology',{
     method:'POST',
@@ -722,7 +758,7 @@ function generate(){
     body:JSON.stringify({
       model:'claude-sonnet-4-6',
       max_tokens:2800,
-      system:buildSystem(addr),
+      system:buildSystem(addr,team),
       messages:[{role:'user',content:buildUser(co,tkey,ind,sev,tone,ctx)}]
     })
   })
@@ -802,7 +838,7 @@ function readStream(stream){
 
 // ── SYSTEM PROMPT ─────────────────────────────────────────────────────────────
 
-function buildSystem(addr){
+function buildSystem(addr,team){
   return [
     'You are the ghostwriter behind history\'s most infamous corporate non-apologies. Your specialty: letters that perform contrition while admitting nothing, that sound warm while committing to nothing, and that a reader finishes feeling vaguely managed rather than apologized to. You are funny the way real corporate PR is accidentally funny — through precision, euphemism, and misplaced confidence, never through jokes. Never wink at the reader. Play it completely straight. The comedy is that this is exactly how they really write.',
     '',
@@ -838,8 +874,11 @@ function buildSystem(addr){
     'DO NOT put names, titles, addresses, tickers, or sign-off text inside any paragraph. The signature, company address, and exec details are returned in their OWN JSON fields and rendered separately. Paragraphs are body prose ONLY.',
     '',
     'OTHER FIELDS:',
-    '- ceoName: startup-founder energy (Brax Hollowell, Sloane Vanthorpe, Vesper Thane, Soren Vail, Mirren Cole, Daxton Krieger, Riven Nash, Waverly Orin, Calen Draper, Tanner Kole). Use a fresh one each time.',
-    '- exec2/exec3: absurd-but-plausible titles (Chief Trust Officer, Global Head of Consequence Management, Chief Empathy Engineer, VP of Stakeholder Experience, Chief Listening Officer).',
+    '- USE THESE EXACT EXECUTIVE NAMES AND TITLES (do not invent your own, do not substitute):',
+    '    ceoName: "' + team.ceoName + '"  ceoTitle: "' + team.ceoTitle + '"',
+    '    exec2Name: "' + team.exec2Name + '"  exec2Title: "' + team.exec2Title + '"',
+    '    exec3Name: "' + team.exec3Name + '"  exec3Title: "' + team.exec3Title + '"',
+    '  Echo these values back verbatim in the corresponding JSON fields.',
     '- companyTagline: aspirational and meaningless, specific to the industry.',
     '- companyTicker: invented 3-5 letter NASDAQ ticker.',
     '- companyMetrics: 3 impressive-but-meaningless stats specific to the company.',
@@ -888,6 +927,14 @@ function buildUser(co,tkey,ind,sev,tone,ctx){
 // ── RENDER ────────────────────────────────────────────────────────────────────
 
 function renderLetter(d,co){
+  // The exec team is generated client-side and injected into the prompt.
+  // Force those names regardless of what the model echoed back, so the
+  // signatures always match and stay varied (no more 5x "Brax").
+  if(lastTeam){
+    d.ceoName=lastTeam.ceoName; d.ceoTitle=d.ceoTitle||lastTeam.ceoTitle;
+    d.exec2Name=lastTeam.exec2Name; d.exec2Title=lastTeam.exec2Title;
+    d.exec3Name=lastTeam.exec3Name; d.exec3Title=lastTeam.exec3Title;
+  }
   var initials=co.split(/\s+/).map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,2);
   var date=d.date||new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   var slug=co.toLowerCase().replace(/[^a-z0-9]/g,'');

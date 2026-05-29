@@ -731,7 +731,7 @@ function generate(){
     clearInterval(miv);
     if(d.error)throw new Error(typeof d.error==='object'?d.error.message:String(d.error));
     var txt=d.content[0].text.trim().replace(/^```json\s*/i,'').replace(/\s*```$/i,'').trim();
-    var parsed=JSON.parse(txt);
+    var parsed=safeParse(txt);
     lastSubj=parsed.subjectLine||'';
     renderLetter(parsed,co);
   })
@@ -773,6 +773,7 @@ function buildSystem(addr){
     'In the paragraph text, insert 6-8 phrases marked as [[REDACT:honest phrase here]] where the honest/damning phrase replaces what the corporate text implies. These are the things the company almost said. The revealed text should be funnier and more honest than the surrounding language.',
     'Examples: [[REDACT:we knew about this for 14 months]], [[REDACT:our legal team advised us to say nothing]], [[REDACT:three board members resigned over this]], [[REDACT:the product never worked as described]], [[REDACT:we deleted the relevant Slack channels]]',
     'Distribute these across paragraphs 1-5, not all in one place.',
+    'IMPORTANT: Inside [[REDACT:...]] never use double quotes, square brackets, or newlines — use plain words only, since this text lives inside a JSON string.',
     '',
     'PARAGRAPH ARCS (6 required):',
     'P1: Mission statement and values — implies apology is imminent, delivers none',
@@ -782,7 +783,13 @@ function buildSystem(addr){
     'P5: Forward-looking pivot — the scandal reframed as catalyst for positive change; references another company they admire',
     'P6: Leadership "evolution" statement — personnel changes described in bloodless euphemism if severity 4+',
     '',
-    'OUTPUT: Return ONLY valid JSON. No markdown. No backticks. No preamble. Exact structure:',
+    'OUTPUT FORMATTING — STRICT. Your entire response must be a single valid JSON object and nothing else.',
+    '- No markdown, no backticks, no prose before or after.',
+    '- Use ONLY straight double quotes for JSON syntax. Inside string VALUES, never use a raw double quote — use single quotes or the word instead.',
+    '- Every array element and object property must be separated by a comma. Do not put two strings next to each other without a comma.',
+    '- Do not use newlines inside string values; write each paragraph as one continuous line.',
+    '- Escape nothing exotic; keep characters plain ASCII where possible.',
+    'Exact structure:',
     '{"ceoName":"","ceoTitle":"","exec2Name":"","exec2Title":"","exec3Name":"","exec3Title":"","companyTagline":"","companyTicker":"","companyMetrics":["","",""],"companyAddress":"","refNumber":"","date":"","subjectLine":"","salutation":"","paragraphs":["","","","","",""],"closing":"","ccList":["","","","",""],"pressHeadlines":["","",""],"reportCard":{"remorse":"F","transparency":"F","actionTaken":"D-","accountability":"F","futureCommitment":"D"},"disclaimer":""}'
   ].join('\n');
 }
@@ -944,6 +951,65 @@ function renderLetter(d,co){
     document.getElementById('gaugeNeedle').style.transform='rotate('+angle+'deg)';
     document.getElementById('gaugePct').textContent=pct+'%';
   },500);
+}
+
+// ── SAFE JSON PARSE (with repair) ───────────────────────────────────────────
+
+function safeParse(txt){
+  // Attempt 1: straight parse
+  try{return JSON.parse(txt);}catch(e){}
+
+  // Attempt 2: extract the outermost {...} block (drops any stray prose)
+  var first=txt.indexOf('{'), last=txt.lastIndexOf('}');
+  if(first!==-1&&last!==-1&&last>first){
+    var slice=txt.slice(first,last+1);
+    try{return JSON.parse(slice);}catch(e){}
+
+    // Attempt 3: repair common model JSON faults
+    var repaired=slice
+      .replace(/,\s*([}\]])/g,'$1')                 // trailing commas
+      .replace(/}\s*{/g,'},{')                       // missing comma between objects
+      .replace(/"\s*\n\s*"/g,'",\n"')                // missing comma between adjacent strings on new lines
+      .replace(/"\s+"(?=[^:]*[,\]}])/g,'", "');      // missing comma between strings in arrays
+    try{return JSON.parse(repaired);}catch(e){}
+
+    // Attempt 4: field-by-field extraction so we always render *something*
+    return extractFields(slice);
+  }
+  throw new Error('Could not parse the generated letter. Hit Regenerate \u2014 the model occasionally returns malformed output.');
+}
+
+// Last-resort: pull known fields out individually with regex
+function extractFields(s){
+  function str(key){
+    var m=s.match(new RegExp('"'+key+'"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"'));
+    return m?m[1].replace(/\\"/g,'"').replace(/\\n/g,' '):'';
+  }
+  function arr(key){
+    var m=s.match(new RegExp('"'+key+'"\\s*:\\s*\\[([\\s\\S]*?)\\]'));
+    if(!m)return [];
+    var items=m[1].match(/"((?:[^"\\]|\\.)*)"/g)||[];
+    return items.map(function(i){return i.slice(1,-1).replace(/\\"/g,'"').replace(/\\n/g,' ');});
+  }
+  var rc={};
+  var rcMatch=s.match(/"reportCard"\s*:\s*\{([\s\S]*?)\}/);
+  if(rcMatch){
+    ['remorse','transparency','actionTaken','accountability','futureCommitment'].forEach(function(k){
+      var mm=rcMatch[1].match(new RegExp('"'+k+'"\\s*:\\s*"([^"]*)"'));
+      if(mm)rc[k]=mm[1];
+    });
+  }
+  return {
+    ceoName:str('ceoName'),ceoTitle:str('ceoTitle'),
+    exec2Name:str('exec2Name'),exec2Title:str('exec2Title'),
+    exec3Name:str('exec3Name'),exec3Title:str('exec3Title'),
+    companyTagline:str('companyTagline'),companyTicker:str('companyTicker'),
+    companyMetrics:arr('companyMetrics'),companyAddress:str('companyAddress'),
+    refNumber:str('refNumber'),date:str('date'),subjectLine:str('subjectLine'),
+    salutation:str('salutation'),paragraphs:arr('paragraphs'),closing:str('closing'),
+    ccList:arr('ccList'),pressHeadlines:arr('pressHeadlines'),
+    reportCard:rc,disclaimer:str('disclaimer')
+  };
 }
 
 // ── PROCESS REDACTIONS ────────────────────────────────────────────────────────

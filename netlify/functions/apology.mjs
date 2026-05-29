@@ -1,7 +1,7 @@
 // netlify/functions/apology.mjs
-// Server-side proxy — API key never reaches the browser.
-// Routed via the in-code config.path export (Netlify's recommended method).
-
+// Server-side proxy that STREAMS the Anthropic response.
+// Streaming keeps the connection alive and avoids the 10s synchronous
+// function timeout (504 Gateway Timeout) on long generations.
 
 export default async (req) => {
   if (req.method !== 'POST') {
@@ -24,26 +24,39 @@ export default async (req) => {
     status: 400, headers: { 'Content-Type': 'application/json' }
   }); }
 
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({
-        model: body.model || 'claude-sonnet-4-6',
-        max_tokens: body.max_tokens || 2400,
-        system: body.system,
-        messages: body.messages
-      })
-    });
-    const data = await res.json();
-    return new Response(JSON.stringify(data), {
-      status: res.status, headers: { 'Content-Type': 'application/json' }
-    });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: { message: 'Upstream error: ' + err.message } }), {
-      status: 502, headers: { 'Content-Type': 'application/json' }
+  // Request a streaming response from Anthropic
+  const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01'
+    },
+    body: JSON.stringify({
+      model: body.model || 'claude-sonnet-4-6',
+      max_tokens: body.max_tokens || 2400,
+      system: body.system,
+      messages: body.messages,
+      stream: true
+    })
+  });
+
+  if (!upstream.ok) {
+    const errText = await upstream.text();
+    return new Response(JSON.stringify({ error: { message: 'Anthropic API error (' + upstream.status + '): ' + errText.slice(0, 300) } }), {
+      status: upstream.status, headers: { 'Content-Type': 'application/json' }
     });
   }
+
+  // Pipe the SSE stream straight back to the browser
+  return new Response(upstream.body, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/event-stream; charset=utf-8',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive'
+    }
+  });
 };
 
 export const config = {
